@@ -14,6 +14,8 @@ def convert_to_onnx(
     model_id: str = "awsaf49/sonics-spectttra-alpha-5s",
     output_path: str = "exports/sonics_model.onnx",
 ) -> None:
+    print(f"Converting model {model_id}...")
+    print(f"Downloading model from HuggingFace...")
     model = HFAudioClassifierProb.from_pretrained(model_id)
     model.eval()
 
@@ -22,6 +24,7 @@ def convert_to_onnx(
     max_time = model.config.audio.max_time
     dummy_input = torch.randn(1, ORIGINAL_SR * max_time)
 
+    print(f"Exporting to onnx and saving to {output_path}...")
     torch.onnx.export(
         model,
         dummy_input,
