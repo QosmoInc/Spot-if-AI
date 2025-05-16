@@ -1,0 +1,21 @@
+[project]
+name = "sonics-onnx-converter"
+version = "0.1.0"
+description = "Convert SONICS models to ONNX format"
+authors = [
+    {name = "Qosmo, Inc."}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "sonics @ git+https://github.com/awsaf49/sonics.git",
+    "fire (>=0.7.0,<0.8.0)",
+    "torchlibrosa (>=0.1.0,<0.2.0)",
+    "onnx (>=1.17.0,<2.0.0)",
+    "onnxruntime (>=1.21.0,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
