@@ -1,11 +1,13 @@
 import { getUniqueStr } from "./utils";
 
+const fakeProbabilityClass = "fake-probability";
+
 export const createFakeProbabilityDiv = (probability: number, kind: "track" | "playlist"): HTMLDivElement => {
     const uniqueStr = getUniqueStr();
 
     const div = document.createElement('div');
     div.id = `fake-probability-${uniqueStr}`;
-    div.className = "fake-probability";
+    div.className = fakeProbabilityClass;
 
     if (kind === "track") {
         div.style.position = 'absolute';
@@ -60,4 +62,9 @@ const createFakeBar = (probability: number, fakeBarId: string, fakeFillId: strin
     fakeBar.appendChild(fakeFill);
 
     return fakeBar;
+}
+
+export const removeFakeProbabilityDivs = () => {
+    const divs = document.querySelectorAll(`.${fakeProbabilityClass}`);
+    divs.forEach(div => div.remove());
 }

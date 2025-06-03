@@ -10,6 +10,7 @@ export default defineConfig({
             input: {
                 service_worker: resolve(__dirname, 'src/service_worker.ts'),
                 content_scripts: resolve(__dirname, 'src/content_scripts.ts'),
+                popup: resolve(__dirname, 'src/popup.ts'),
             },
             output: { entryFileNames: '[name].js' },
         },

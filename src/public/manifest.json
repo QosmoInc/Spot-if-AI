@@ -6,7 +6,7 @@
     "icons": {
         "512": "icons/icon512.png"
     },
-    "permissions": ["tabs"],
+    "permissions": ["tabs", "storage"],
     "content_security_policy": {
         "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
     },
@@ -21,7 +21,11 @@
         }
     ],
     "host_permissions": [],
-    "action": {},
+    "action": {
+        "default_title": "SpotifAI",
+        "default_icon": "icons/icon512.png",
+        "default_popup": "popup.html"
+    },
     "content_scripts": [
         {
             "matches": [ "https://open.spotify.com/*" ],

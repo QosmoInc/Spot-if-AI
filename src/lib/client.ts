@@ -1,9 +1,10 @@
-import { createFakeProbabilityDiv } from "./components";
+import { createFakeProbabilityDiv, removeFakeProbabilityDivs } from "./components";
 import { classifyTrack, processInternalTrackLink } from "./track_handler";
 
 const TRACK_PATTERN = /^https:\/\/open\.spotify\.com\/(?:[^\/]+\/)?track\/[^\/]+/;
 const OTHER_PATTERN = /^https:\/\/open\.spotify\.com\/(?:[^\/]+\/)?(?:artist|album|playlist)\/[^\/]+/;
 
+let is_show = true;
 let trackDiv: HTMLDivElement | null = null;
 let observer: MutationObserver | null = null;
 
@@ -16,6 +17,9 @@ const handleTrackPage = async (url: string) => {
     }
 
     const addProbabilityDiv = (container: Element) => {
+        if (!is_show) {
+            return;
+        }
         trackDiv = createFakeProbabilityDiv(probability, "track");
         container.appendChild(trackDiv);
     };
@@ -44,7 +48,12 @@ const handleTrackPage = async (url: string) => {
 
 const handleOtherPage = async () => {
     const initialTrackLinks = document.querySelectorAll('[data-testid="internal-track-link"]');
-    initialTrackLinks.forEach(processInternalTrackLink);
+
+    const processInternalTrackLinkWithSkip = (link: Element) => {
+        processInternalTrackLink(link, () => !is_show);
+    };
+
+    initialTrackLinks.forEach(processInternalTrackLinkWithSkip);
 
     observer = new MutationObserver((mutationsList) => {
         for (const mutation of mutationsList) {
@@ -53,11 +62,11 @@ const handleOtherPage = async () => {
             }
             mutation.addedNodes.forEach(node => {
                 if (node instanceof Element && node.matches('[data-testid="internal-track-link"]')) {
-                    processInternalTrackLink(node);
+                    processInternalTrackLinkWithSkip(node);
                 }
                 else if (node instanceof Element) {
                     const trackLinks = node.querySelectorAll('[data-testid="internal-track-link"]');
-                    trackLinks.forEach(processInternalTrackLink);
+                    trackLinks.forEach(processInternalTrackLinkWithSkip);
                 }
             });
         }
@@ -66,7 +75,9 @@ const handleOtherPage = async () => {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
-const handleLoad = async () => {
+export const handleLoad = async () => {
+    is_show = true;
+
     const url = window.location.href;
 
     if (observer) {
@@ -85,4 +96,11 @@ const handleLoad = async () => {
     }
 };
 
-export default handleLoad;
+export const cleanup = () => {
+    if (observer) {
+        observer.disconnect();
+        observer = null;
+    }
+    removeFakeProbabilityDivs();
+    is_show = false;
+}   

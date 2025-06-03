@@ -1,0 +1,66 @@
+.toggle-button {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 37.5px;
+    height: 9.375px;
+    border-radius: 37.5px;
+    background-color: #dddddd;
+    cursor: pointer;
+    transition: background-color .4s;
+}
+
+.toggle-button:has(:checked) {
+    background-color: #4bd865;
+}
+
+.toggle-button::after {
+    position: absolute;
+    left: 0;
+    width: 18.75px;
+    height: 18.75px;
+    border-radius: 50%;
+    box-shadow: 0 0 3.75px rgb(0 0 0 / 60%);
+    background: #fff;
+    content: '';
+    transition: left .4s;
+}
+
+.toggle-button:has(:checked)::after {
+    left: 18.75px;
+}
+
+.toggle-button input {
+    display: none;
+}
+
+.main-div {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 16px;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+    padding: 0.625rem;
+}
+
+h1 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}
+
+.no-transition .toggle-button::after {
+  transition: none !important;
+}
