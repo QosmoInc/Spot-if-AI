@@ -29,7 +29,7 @@ export const classifyTrack = async (url: string): Promise<number | null> => {
     });
 }
 
-export const processInternalTrackLink = async (link: Element) => {
+export const processInternalTrackLink = async (link: Element, isSkip: () => boolean) => {
     const href = link.getAttribute('href');
     const parent = link.parentElement?.parentElement;
     const existingDiv = parent?.querySelector(`.fake-probability[data-track-href="${href}"]`);
@@ -43,7 +43,9 @@ export const processInternalTrackLink = async (link: Element) => {
         if (probability !== null) {
             const div = createFakeProbabilityDiv(probability, "playlist");
             div.setAttribute('data-track-href', href);
-            parent.appendChild(div);
+            if (!isSkip()) {
+                parent.appendChild(div);
+            }
         }
     } catch (error) {
         console.error(`Error processing track ${href}:`, error);
