@@ -6,13 +6,18 @@
     "icons": {
         "512": "icons/icon512.png"
     },
-    "permissions": ["tabs", "storage"],
+    "permissions": [
+        "tabs",
+        "storage"
+    ],
     "content_security_policy": {
         "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
     },
     "web_accessible_resources": [
         {
-            "matches": [ "https://open.spotify.com/*" ],
+            "matches": [
+                "https://open.spotify.com/*"
+            ],
             "resources": [
                 "assets/*",
                 "sonics_model.onnx",
@@ -27,8 +32,13 @@
     },
     "content_scripts": [
         {
-            "matches": [ "https://open.spotify.com/*" ],
-            "js": [ "content_scripts.js" ]
+            "matches": [
+                "https://open.spotify.com/*"
+            ],
+            "js": [
+                "content_scripts.js"
+            ],
+            "run_at": "document_idle"
         }
     ],
     "background": {

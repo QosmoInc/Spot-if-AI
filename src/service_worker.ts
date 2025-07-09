@@ -1,25 +1,43 @@
 import infer from "./lib/infer_engine";
 
+let inferenceQueue = Promise.resolve();
+
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-    if (!message.waveform) {
-        console.error("No audio data received.");
-        return;
+    if (message.type === "contentScriptReady" && _sender.tab?.id) {
+        chrome.tabs.sendMessage(_sender.tab.id, "loaded", () => {
+            if (chrome.runtime.lastError) {
+                console.warn("Error sending 'loaded' to tab:", chrome.runtime.lastError.message);
+            }
+        });
+        return true; // keep channel open for async sendResponse if needed
     }
 
-    const audioData = new Float32Array(JSON.parse(message.waveform));
+    if (message && typeof message === "object" && "waveform" in message) {
+        const audioData = new Float32Array(JSON.parse(message.waveform));
 
-    infer(audioData).then(probability => {
-        sendResponse(probability);
-    }).catch(error => {
-        console.error("Error during inference:", error);
-        sendResponse(null);
-    });
+        inferenceQueue = inferenceQueue.then(async () => {
+            try {
+                const result = await infer(audioData);
+                sendResponse(result);
+            } catch (error) {
+                console.error("Error during inference:", error);
+                sendResponse(null);
+            }
+        });
 
-    return true;
+        return true; // keep channel open for async response
+    }
+
+    if (message === "loaded") {
+        return false;
+    }
+
+    console.warn("Received unknown message:", message);
+    return false;
 });
 
 chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
-    if (info.status === 'complete' && tab.url && tab.url.indexOf('https://open.spotify.com/') !== -1) {
-        chrome.tabs.sendMessage(tabId, "loaded", () => { });
+    if (info.status === 'complete' && tab.url?.includes('https://open.spotify.com/')) {
+        chrome.tabs.sendMessage(tabId, "loaded");
     }
 });
