@@ -20,7 +20,6 @@
             ]
         }
     ],
-    "host_permissions": [],
     "action": {
         "default_title": "SpotifAI",
         "default_icon": "icons/icon512.png",
