@@ -6,27 +6,31 @@ export const MAX_TIME = 5;
 ort.env.wasm.numThreads = 1;
 ort.env.wasm.wasmPaths = "./";
 
-let session: ort.InferenceSession | null = null;
+let sessionPromise: Promise<ort.InferenceSession | null> | null = null;
 
-const initSession = async () => {
-    if (session !== null) {
-        return;
-    }
+export const initSession = (): Promise<ort.InferenceSession | null> => {
+    if (sessionPromise) return sessionPromise;
 
-    try {
-        session = await ort.InferenceSession.create("./sonics_model.onnx", {
-            executionProviders: ["wasm"]
-        });
-    } catch (error) {
-        console.error("Error initializing ONNX Runtime session:", error);
-    }
+    sessionPromise = (async () => {
+        try {
+            const session = await ort.InferenceSession.create('./sonics_model.onnx', {
+                executionProviders: ["wasm"],
+            });
+            return session;
+        } catch (err) {
+            console.error("Failed to load model:", err);
+            return null;
+        }
+    })();
+
+    return sessionPromise;
 }
 
 const infer = async (audioData: Float32Array): Promise<number | null> => {
     const audioDataTensor = new ort.Tensor("float32", audioData, [1, MAX_TIME * SAMPLING_RATE]);
 
     const feeds = { audio: audioDataTensor };
-    await initSession();
+    const session = await initSession();
     if (session) {
         try {
             const results = await session.run(feeds);
