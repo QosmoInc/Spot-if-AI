@@ -1,11 +1,5 @@
 <p align="center"><a href="https://chrome.google.com/webstore/detail/spot-if-ai/olbnhjmkblmlmoolnglgpdljkaaogkbg" target="_blank" rel="noreferrer noopener"><img width="250" alt="Spot-if-AI icon" src="https://spot-if-ai.qosmo.jp/favicon.svg"></a></p>
 
-<p align="center">
-  <a href="https://chrome.google.com/webstore/detail/spot-if-ai/olbnhjmkblmlmoolnglgpdljkaaogkbg">
-    <img src="https://img.shields.io/chrome-web-store/v/olbnhjmkblmlmoolnglgpdljkaaogkbg.svg?label=Chrome%20Web%20Store&style=flat-square" alt="Chrome Web Store">
-  </a>
-</p>
-
 <p align="center">Spot-if-AI helps users identify if a Spotify track has been generated with tools such as Suno or Udio.</p>
 <br/>
 
@@ -17,12 +11,9 @@ Spot-if-AI is a Chrome extension that analyzes whether songs on Spotify have bee
 
 ## How to install
 
-Download it from the [Chrome Webstore](https://chrome.google.com/webstore/detail/spot-if-ai/olbnhjmkblmlmoolnglgpdljkaaogkbg), build the extension as described below or download it from the GitHub releases page.
+We have concluded our public beta experiment and the extension is no longer published to the Chrome Web Store. Some artists raised concerns about being flagged wrongly. As always stated, our results reflect a likelihood — not a certainty.
 
-Unzip the extension to a directory and with developer mode enabled use the `Load unpacked` button to load the extension from the directory. If you built the extension you can simply load the generated `dist` directory.
-
-
-For more details visit [Google's official guide](https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked) to loading unpacked extensions.
+We will keep the extension source code available on GitHub in case people want to build it or extend upon it.
 
 ## How to use
 
